@@ -2,5 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:group_names/input_name.dart';
 
 void main() {
-  runApp(const NameInuptPage());
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: NameInputPage(),
+    );
+  }
 }
