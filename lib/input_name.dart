@@ -10,12 +10,26 @@ class NameInputPage extends StatefulWidget {
 class _NameInputPageState extends State<NameInputPage> {
   TextEditingController _inputName = TextEditingController();
 
+  List<String> namesList = [];
+
+  void enterToList(String name) {
+    if (!namesList.contains(name)) {
+      namesList.add(name);
+    } else {
+      _showTextPopup(name);
+    }
+  }
+
+  void groupNames() {
+    namesList.shuffle();
+  }
+
   void _showTextPopup(String name) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Entered Name:'),
+          title: const Text('Entered Name already exist'),
           content: Text(
             name,
             style: const TextStyle(fontSize: 30),
@@ -26,7 +40,7 @@ class _NameInputPageState extends State<NameInputPage> {
                 Navigator.of(context).pop();
                 _inputName.clear();
               },
-              child: const Text('return'),
+              child: const Text('Return'),
             ),
           ],
         );
@@ -60,13 +74,38 @@ class _NameInputPageState extends State<NameInputPage> {
             const SizedBox(
               height: 20,
             ),
-            TextButton(
-              onPressed: () {
-                var name = _inputName.text;
-                _showTextPopup(name);
-              },
-              child: const Text('Enter'),
-            )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue.shade300,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    var name = _inputName.text;
+                    // _showTextPopup(name);
+                    enterToList(name);
+                    print(namesList);
+                  },
+                  child: const Text('Enter'),
+                ),
+                SizedBox(
+                  width: 30,
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue.shade300,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    groupNames();
+                    print(namesList);
+                  },
+                  child: const Text('Group'),
+                )
+              ],
+            ),
           ],
         ),
       ),
