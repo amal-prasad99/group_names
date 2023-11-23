@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:group_names/cards.dart';
 
 class NameInputPage extends StatefulWidget {
   const NameInputPage({super.key});
@@ -11,6 +12,8 @@ class _NameInputPageState extends State<NameInputPage> {
   TextEditingController _inputName = TextEditingController();
 
   List<String> namesList = [];
+  List<List<String>> dividedLists = [];
+  int batchSize = 5;
 
   void enterToList(String name) {
     if (!namesList.contains(name)) {
@@ -22,6 +25,24 @@ class _NameInputPageState extends State<NameInputPage> {
 
   void groupNames() {
     namesList.shuffle();
+  }
+
+  void makeFiveGroups() {
+    for (int i = 0; i < namesList.length; i += batchSize) {
+      int end =
+          (i + batchSize < namesList.length) ? i + batchSize : namesList.length;
+      List<String> sublist = namesList.sublist(i, end);
+      dividedLists.add(List<String>.from(sublist));
+    }
+    for (int i = 0; i < dividedLists.length; i++) {
+      print("List ${i + 1}: ${dividedLists[i]}");
+    }
+  }
+
+  void printSublist(int index) {
+    if (dividedLists.length > index) {
+      print("Second element from dividedLists: ${dividedLists[index]}");
+    }
   }
 
   void _showTextPopup(String name) {
@@ -90,7 +111,7 @@ class _NameInputPageState extends State<NameInputPage> {
                   },
                   child: const Text('Enter'),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 30,
                 ),
                 TextButton(
@@ -99,10 +120,28 @@ class _NameInputPageState extends State<NameInputPage> {
                     foregroundColor: Colors.white,
                   ),
                   onPressed: () {
-                    groupNames();
-                    print(namesList);
+                    // groupNames();
+                    makeFiveGroups();
                   },
                   child: const Text('Group'),
+                ),
+                const SizedBox(
+                  width: 30,
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue.shade300,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              Cards(dividedLists: dividedLists)),
+                    );
+                  },
+                  child: const Text('Go to cards'),
                 )
               ],
             ),
