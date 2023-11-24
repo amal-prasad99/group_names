@@ -129,6 +129,16 @@ class _NameInputPageState extends State<NameInputPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              "Input Names to the list",
+              style: TextStyle(
+                fontSize: 30,
+                color: Colors.blue.shade300,
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: TextField(
@@ -157,7 +167,7 @@ class _NameInputPageState extends State<NameInputPage> {
                   ),
                   onPressed: () {
                     var name = _inputName.text;
-                    // _showTextPopup(name);
+                    if (name.isEmpty) _showTextPopup(name);
                     enterToList(name);
                     print(namesList);
                     _inputName.clear();
@@ -200,6 +210,25 @@ class _NameInputPageState extends State<NameInputPage> {
                 )
               ],
             ),
+            const SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.red.shade500,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    namesList = [];
+                    dividedLists = [];
+                  },
+                  child: const Text('Clear List'),
+                )
+              ],
+            )
           ],
         ),
       ),
