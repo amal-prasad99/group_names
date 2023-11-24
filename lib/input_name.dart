@@ -24,16 +24,65 @@ class _NameInputPageState extends State<NameInputPage> {
   }
 
   void groupNames() {
-    namesList.shuffle();
+    if (namesList.length < 15) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Need to have morethan 15 names'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _inputName.clear();
+                },
+                child: const Text('Return'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      makeFiveGroups();
+    }
   }
 
   void makeFiveGroups() {
-    for (int i = 0; i < namesList.length; i += batchSize) {
-      int end =
-          (i + batchSize < namesList.length) ? i + batchSize : namesList.length;
-      List<String> sublist = namesList.sublist(i, end);
-      dividedLists.add(List<String>.from(sublist));
+    namesList.shuffle();
+    int aryLength = namesList.length;
+
+    if (aryLength % 5 != 0 && aryLength % 5 != 4) {
+      int remender = aryLength % 5;
+      print('remender of if is $remender');
+
+      for (int i = 0; i < namesList.length - remender; i += batchSize) {
+        int end = (i + batchSize < namesList.length)
+            ? i + batchSize
+            : namesList.length;
+        List<String> sublist = namesList.sublist(i, end);
+        dividedLists.add(List<String>.from(sublist));
+      }
+
+      if (remender == 1) {
+        dividedLists[0].add(namesList[aryLength - 1]);
+      } else if (remender == 2) {
+        dividedLists[0].add(namesList[aryLength - 1]);
+        dividedLists[1].add(namesList[aryLength - 2]);
+      } else if (remender == 3) {
+        dividedLists[0].add(namesList[aryLength - 1]);
+        dividedLists[1].add(namesList[aryLength - 2]);
+        dividedLists[2].add(namesList[aryLength - 3]);
+      }
+    } else {
+      for (int i = 0; i < namesList.length; i += batchSize) {
+        int end = (i + batchSize < namesList.length)
+            ? i + batchSize
+            : namesList.length;
+        List<String> sublist = namesList.sublist(i, end);
+        dividedLists.add(List<String>.from(sublist));
+      }
     }
+
     for (int i = 0; i < dividedLists.length; i++) {
       print("List ${i + 1}: ${dividedLists[i]}");
     }
@@ -84,6 +133,9 @@ class _NameInputPageState extends State<NameInputPage> {
               padding: const EdgeInsets.all(15.0),
               child: TextField(
                 controller: _inputName,
+                onTap: () {
+                  dividedLists = [];
+                },
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.create),
@@ -109,6 +161,7 @@ class _NameInputPageState extends State<NameInputPage> {
                     enterToList(name);
                     print(namesList);
                     _inputName.clear();
+                    dividedLists = [];
                   },
                   child: const Text('Enter'),
                 ),
@@ -121,8 +174,7 @@ class _NameInputPageState extends State<NameInputPage> {
                     foregroundColor: Colors.white,
                   ),
                   onPressed: () {
-                    // groupNames();
-                    makeFiveGroups();
+                    groupNames();
                   },
                   child: const Text('Group'),
                 ),
@@ -135,6 +187,8 @@ class _NameInputPageState extends State<NameInputPage> {
                     foregroundColor: Colors.white,
                   ),
                   onPressed: () {
+                    FocusScope.of(context).unfocus();
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
