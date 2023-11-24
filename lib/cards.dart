@@ -33,22 +33,26 @@ class Cards extends StatelessWidget {
               child: ListView.builder(
                 itemCount: dividedLists.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 20,
-                    color: Colors.blue.shade300,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Wrap(
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Wrap(
                         children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: dividedLists[index]
-                                .map((names) => Text(names))
-                                .toList(),
+                          Card(
+                            elevation: 20,
+                            color: Colors.blue.shade300,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                children: dividedLists[index]
+                                    .map((names) => Text(names))
+                                    .toList(),
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                    ),
+                    ],
                   );
                 },
               ),

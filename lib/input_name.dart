@@ -108,6 +108,7 @@ class _NameInputPageState extends State<NameInputPage> {
                     // _showTextPopup(name);
                     enterToList(name);
                     print(namesList);
+                    _inputName.clear();
                   },
                   child: const Text('Enter'),
                 ),
